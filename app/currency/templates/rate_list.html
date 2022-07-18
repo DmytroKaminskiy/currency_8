@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}RATE LIST{% endblock title %}
+
+{% block main_content %}
+    {% for rate in rate_list %}
+        <div>ID: {{ rate.id }}, Sale: {{ rate.sale }}, Buy: {{ rate.buy }}</div>
+    {% endfor %}
+{% endblock main_content %}
