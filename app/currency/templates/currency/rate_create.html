@@ -1,0 +1,16 @@
+{% extends 'currency/base.html' %}
+
+{% block title %}RATE CREATE{% endblock title %}
+
+{% block main_content %}
+    Rate Create
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+{#        <label for="a">Send Email?</label>#}
+{#        <input type="checkbox" id="a">#}
+        <button type="reset">Reset</button>
+        <button type="submit">Send</button>
+    </form>
+{% endblock main_content %}
