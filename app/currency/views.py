@@ -1,76 +1,112 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse, reverse_lazy
+
+from django.views import generic
 
 from currency.models import Rate
 from currency.forms import RateForm
 
 # context_processor - GLOBAL Context - base.html
 
-def index(request):
-    return render(request, 'currency/index.html')
+# def index(request):
+#     return render(request, 'currency/index.html')
+
+class IndexView(generic.TemplateView):
+    template_name = 'currency/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rate_count'] = Rate.objects.count()
+        return context
 
 
-def rate_list(request):
-    context = {
-        'rate_list': Rate.objects.all(),
-    }
-    return render(request, 'currency/rate_list.html', context=context)  # rate_list.html
+class RateListView(generic.ListView):
+    queryset = Rate.objects.all()
+    template_name = 'currency/rate_list.html'
+
+    # def get_context_data(self, *args, **kwargs):
+    #     Rate.objects.last()
+    #     return super().get_context_data(*args, **kwargs)
 
 
-def rate_create(request):
-
-    if request.method == 'POST':
-        form = RateForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/rate/list/')
-    elif request.method == 'GET':
-        form = RateForm()
-
-    context = {'form': form}
-    return render(request, 'currency/rate_create.html', context=context)
+class RateCreateView(generic.CreateView):
+    queryset = Rate.objects.all()
+    template_name = 'currency/rate_create.html'
+    form_class = RateForm
+    # success_url = '/rate/list/'
+    success_url = reverse_lazy('currency:rate_list')
 
 
-def rate_update(request, rate_id):
-    '''
-    /rate/update/?id=12
-    /rate/update/12/
-    '''
-
-    # try:
-    #     rate_instance = Rate.objects.get(id=rate_id)
-    # except Rate.DoesNotExist:
-    #     raise Http404
-
-    rate_instance = get_object_or_404(Rate, id=rate_id)
-
-    if request.method == 'POST':
-        form = RateForm(request.POST, instance=rate_instance)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/rate/list/')
-    elif request.method == 'GET':
-        form = RateForm(instance=rate_instance)
-
-    context = {'form': form}
-    return render(request, 'currency/rate_update.html', context=context)
+class RateUpdateView(generic.UpdateView):
+    queryset = Rate.objects.all()
+    template_name = 'currency/rate_update.html'
+    form_class = RateForm
+    success_url = reverse_lazy('currency:rate_list')
 
 
-def rate_details(request, rate_id):
-    rate_instance = get_object_or_404(Rate, id=rate_id)
-    context = {'instance': rate_instance}
-    return render(request, 'currency/rate_details.html', context=context)
+class RateDeleteView(generic.DeleteView):
+    queryset = Rate.objects.all()
+    template_name = 'currency/rate_delete.html'
+    success_url = reverse_lazy('currency:rate_list')
+
+class RateDetailsView(generic.DeleteView):
+    queryset = Rate.objects.all()
+    template_name = 'currency/rate_details.html'
 
 
-def rate_delete(request, rate_id):
-    rate_instance = get_object_or_404(Rate, id=rate_id)
-
-    if request.method == 'POST':
-        rate_instance.delete()
-        return HttpResponseRedirect('/rate/list/')
-
-    context = {'instance': rate_instance}
-    return render(request, 'currency/rate_delete.html', context=context)
+# def rate_list(request):
+#     context = {
+#         'rate_list': Rate.objects.all(),
+#     }
+#     return render(request, 'currency/rate_list.html', context=context)  # rate_list.html
+#
+#
+# def rate_create(request):
+#
+#     if request.method == 'POST':
+#         form = RateForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect(reverse('rate_list'))  # HttpResponseRedirect('/rate/list/')
+#     elif request.method == 'GET':
+#         form = RateForm()
+#
+#     context = {'form': form}
+#     return render(request, 'currency/rate_create.html', context=context)
+#
+#
+# def rate_update(request, rate_id):
+#
+#     rate_instance = get_object_or_404(Rate, id=rate_id)
+#
+#     if request.method == 'POST':
+#         form = RateForm(request.POST, instance=rate_instance)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect('/rate/list/')
+#     elif request.method == 'GET':
+#         form = RateForm(instance=rate_instance)
+#
+#     context = {'form': form}
+#     return render(request, 'currency/rate_update.html', context=context)
+#
+#
+# def rate_details(request, rate_id):
+#     rate_instance = get_object_or_404(Rate, id=rate_id)
+#     context = {'instance': rate_instance}
+#     return render(request, 'currency/rate_details.html', context=context)
+#
+#
+# def rate_delete(request, rate_id):
+#     rate_instance = get_object_or_404(Rate, id=rate_id)
+#
+#     if request.method == 'POST':
+#         rate_instance.delete()
+#         return HttpResponseRedirect('/rate/list/')
+#
+#     context = {'instance': rate_instance}
+#     return render(request, 'currency/rate_delete.html', context=context)
 
 
 # def get_form(request):
