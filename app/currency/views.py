@@ -6,6 +6,7 @@ from django.views import generic
 
 from currency.models import Rate
 from currency.forms import RateForm
+from currency.model_choices import CurrencyType
 
 # context_processor - GLOBAL Context - base.html
 
@@ -15,8 +16,8 @@ from currency.forms import RateForm
 class IndexView(generic.TemplateView):
     template_name = 'currency/index.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_context_data(self, **kwargs) -> dict:
+        context: dict = super().get_context_data(**kwargs)
         context['rate_count'] = Rate.objects.count()
         return context
 
@@ -36,6 +37,7 @@ class RateCreateView(generic.CreateView):
     form_class = RateForm
     # success_url = '/rate/list/'
     success_url = reverse_lazy('currency:rate_list')
+    initial = {'currency_type': CurrencyType.CURRENCY_TYPE_EUR}
 
 
 class RateUpdateView(generic.UpdateView):
@@ -180,3 +182,9 @@ HEAD - GET without body (Content-Length)
 
 
 '''
+
+# def foo(request):
+#     path = request.GET.get('path')
+#     '../../../../../../../etc/conf'
+#     with open(path) as file:
+#         ...

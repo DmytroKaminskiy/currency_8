@@ -1,6 +1,7 @@
 Django==4.0.6
 django-extensions
 ipython
+django-admin-rangefilter
 
 # dev
 # TODO check view name is not displayed
