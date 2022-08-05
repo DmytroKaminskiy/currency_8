@@ -10,4 +10,5 @@ urlpatterns = [
     path('rate/update/<int:pk>/', views.RateUpdateView.as_view(), name='rate_update'),
     path('rate/delete/<int:pk>/', views.RateDeleteView.as_view(), name='rate_delete'),
     path('rate/details/<int:pk>/', views.RateDetailsView.as_view(), name='rate_details'),
+    path('contactus/create/', views.ContactUsCreateView.as_view(), name='contactus_create'),
 ]

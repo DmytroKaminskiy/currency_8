@@ -32,5 +32,7 @@ class RateAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
+    # class Meta:
+    #     verbose_name = ...
 
 admin.site.register(Rate, RateAdmin)

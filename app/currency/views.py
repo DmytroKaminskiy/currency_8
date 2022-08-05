@@ -1,17 +1,22 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
+from django.core.mail import send_mail
 
 from django.views import generic
 
-from currency.models import Rate
+from currency.models import Rate, ContactUs
 from currency.forms import RateForm
 from currency.model_choices import CurrencyType
+
+# from settings import settings BAD
+from django.conf import settings
 
 # context_processor - GLOBAL Context - base.html
 
 # def index(request):
 #     return render(request, 'currency/index.html')
+
 
 class IndexView(generic.TemplateView):
     template_name = 'currency/index.html'
@@ -39,6 +44,9 @@ class RateCreateView(generic.CreateView):
     success_url = reverse_lazy('currency:rate_list')
     initial = {'currency_type': CurrencyType.CURRENCY_TYPE_EUR}
 
+    # def get(self, request, **kwargs):
+    #     return super().get(request, **kwargs)
+
 
 class RateUpdateView(generic.UpdateView):
     queryset = Rate.objects.all()
@@ -56,6 +64,39 @@ class RateDetailsView(generic.DeleteView):
     queryset = Rate.objects.all()
     template_name = 'currency/rate_details.html'
 
+
+class ContactUsCreateView(generic.CreateView):
+    model = ContactUs
+    success_url = reverse_lazy('currency:rate_list')
+    template_name = 'currency/contactus_create.html'
+    fields = (
+        'from_email',
+        'subject',
+        'body',
+    )
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        # form.cleaned_data
+        # self.object
+
+        subject = 'ContactUs From Currency Project'
+        body = f'''
+        Subject From Client: {self.object.subject}
+        Email: {self.object.from_email}
+        Wants to contact
+        '''
+
+        send_mail(
+            subject,
+            body,
+            settings.EMAIL_HOST_USER,
+            [settings.EMAIL_HOST_USER],
+            fail_silently=False,
+        )
+
+        return response
 
 # def rate_list(request):
 #     context = {

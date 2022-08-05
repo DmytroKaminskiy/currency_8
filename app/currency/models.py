@@ -16,3 +16,15 @@ class Rate(models.Model):
     source = models.CharField(max_length=64)
     created = models.DateTimeField(auto_now_add=True)
 
+
+    # class Meta:
+    #     ordering = ...
+    # Rate.objects.annotate().aggregate().order_by()
+
+
+class ContactUs(models.Model):
+    subject = models.CharField(max_length=128)
+    body = models.CharField(max_length=1024)
+    from_email = models.EmailField()
+    to_email = models.EmailField()
+    created = models.DateTimeField(auto_now_add=True)
