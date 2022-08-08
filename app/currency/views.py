@@ -1,16 +1,18 @@
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse, reverse_lazy
+import csv
+import io
+
+from django.http import HttpResponse
+from django.urls import reverse_lazy
 from django.core.mail import send_mail
-
 from django.views import generic
+# from settings import settings BAD
+from django.conf import settings
 
+from currency.resources import RateResource
 from currency.models import Rate, ContactUs
 from currency.forms import RateForm
 from currency.model_choices import CurrencyType
 
-# from settings import settings BAD
-from django.conf import settings
 
 # context_processor - GLOBAL Context - base.html
 
@@ -51,7 +53,7 @@ class RateCreateView(generic.CreateView):
 class RateUpdateView(generic.UpdateView):
     queryset = Rate.objects.all()
     template_name = 'currency/rate_update.html'
-    form_class = RateForm
+    form_class = RateForm  # is_valid()
     success_url = reverse_lazy('currency:rate_list')
 
 
@@ -63,6 +65,45 @@ class RateDeleteView(generic.DeleteView):
 class RateDetailsView(generic.DeleteView):
     queryset = Rate.objects.all()
     template_name = 'currency/rate_details.html'
+
+
+class DownloadRateView(generic.View):
+    # def get(self, request):
+    #     csv_content = RateResource().export().csv
+    #     return HttpResponse(csv_content, content_type='text/csv')
+    def get__(self, request):
+        with open('rate.csv', 'w', newline='') as csvfile:
+            spamwriter = csv.writer(csvfile)
+            headers = ['id', 'buy', 'sale']
+            spamwriter.writerow(headers)
+            for rate in Rate.objects.all():
+                row = [
+                    rate.id,
+                    rate.buy,
+                    rate.sale,
+                ]
+                spamwriter.writerow(row)
+
+        with open('rate.csv', 'r') as f:
+            file_data = f.read()
+
+        return HttpResponse(file_data, content_type='text/csv')
+
+    def get(self, request):
+        csvfile = io.StringIO()
+        spamwriter = csv.writer(csvfile)
+        headers = ['id', 'buy', 'sale']
+        spamwriter.writerow(headers)
+        for rate in Rate.objects.all():
+            row = [
+                rate.id,
+                rate.buy,
+                rate.sale,
+            ]
+            spamwriter.writerow(row)
+
+        csvfile.seek(0)
+        return HttpResponse(csvfile.read(), content_type='text/csv')
 
 
 class ContactUsCreateView(generic.CreateView):

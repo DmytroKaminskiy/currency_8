@@ -4,6 +4,7 @@
 
 {% block main_content %}
     <div><a href="{% url 'currency:rate_create' %}">Create new rate</a></div>
+    <div><a href="{% url 'currency:rate_download' %}">Download CSV</a></div>
 
     {% for rate in rate_list %}
         <div>ID: {{ rate.id }}, Sale: {{ rate.sale }}, Buy: {{ rate.buy }}

@@ -2,6 +2,7 @@ Django
 django-extensions
 ipython
 django-admin-rangefilter
+django-import-export
 
 # dev
 # TODO check view name is not displayed
