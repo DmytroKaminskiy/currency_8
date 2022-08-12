@@ -37,6 +37,12 @@ class Student(Human):
 from abc import ABC, abstractmethod
 
 
+class ShapeInfoMixin:
+    def info(self):
+        print(self.perimeter())
+        print(self.area())
+
+
 class Shape(ABC):
 
     @abstractmethod
@@ -59,15 +65,20 @@ class Triangle(Shape):
     def perimeter(self):
         return 2
 
-class Rectangular(Shape):
+class Rectangular(ShapeInfoMixin, Shape):
     def perimeter(self):
         return 3
 
-shapes = [Circle(), Triangle(), Rectangular()]
+    def area(self):
+        return 5
 
-for i in shapes:
-    print(i.perimeter())
+# shapes = [Circle(), Triangle(), Rectangular()]
+#
+# for i in shapes:
+#     print(i.perimeter())
 
+r = Rectangular()
+r.info()
 
 ###############
 class IsAdmin:

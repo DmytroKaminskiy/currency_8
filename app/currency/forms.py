@@ -11,6 +11,11 @@ class RateForm(forms.ModelForm):
             'buy',
             'source',
         )
+        # widgets = {}
+
+    # def __init__(self):
+    #     super().__init__()
+    #     breakpoint()
 
 # class Student:
 #     pass

@@ -1,5 +1,8 @@
 import csv
 import io
+from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -12,6 +15,8 @@ from currency.resources import RateResource
 from currency.models import Rate, ContactUs
 from currency.forms import RateForm
 from currency.model_choices import CurrencyType
+from django.contrib.sessions.models import Session
+
 
 
 # context_processor - GLOBAL Context - base.html
@@ -29,7 +34,7 @@ class IndexView(generic.TemplateView):
         return context
 
 
-class RateListView(generic.ListView):
+class RateListView(LoginRequiredMixin, generic.ListView):
     queryset = Rate.objects.all()
     template_name = 'currency/rate_list.html'
 
@@ -45,6 +50,12 @@ class RateCreateView(generic.CreateView):
     # success_url = '/rate/list/'
     success_url = reverse_lazy('currency:rate_list')
     initial = {'currency_type': CurrencyType.CURRENCY_TYPE_EUR}
+
+    # def get_form_class(self):
+    #     if self.request.user.is_authenticated:
+    #         return RateForm
+    #     else:
+    #         return RateForm2
 
     # def get(self, request, **kwargs):
     #     return super().get(request, **kwargs)
@@ -116,6 +127,11 @@ class ContactUsCreateView(generic.CreateView):
         'body',
     )
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['body'].widget = forms.Textarea()
+        return form
+
     def form_valid(self, form):
         response = super().form_valid(form)
 
@@ -138,6 +154,26 @@ class ContactUsCreateView(generic.CreateView):
         )
 
         return response
+
+
+# TODO move to accounts app
+class UserProfileView(LoginRequiredMixin, generic.UpdateView):
+    queryset = get_user_model().objects.all()
+    template_name = 'currency/my_profile.html'
+    success_url = reverse_lazy('index')
+    fields = (
+        'first_name',
+        'last_name',
+    )
+
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     queryset = queryset.filter(id=self.request.user.id)
+    #     return queryset
+
+    def get_object(self, queryset=None):
+        # super().get_object()
+        return self.request.user
 
 # def rate_list(request):
 #     context = {

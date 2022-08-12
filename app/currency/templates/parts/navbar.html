@@ -1,4 +1,14 @@
 <div>
     <a href="/">Home</a>
     <a href="{% url "currency:contactus_create" %}">Contact Us</a>
+
+    {% if request.user.is_authenticated %}
+        {{ request.user.email }}
+        <a href="{% url 'currency:my_profile' %}">My Profile</a>
+        <a href="{% url 'logout' %}">LogOut</a>
+    {% else %}
+        <a href="{% url 'login' %}">LogIn</a>
+        <a href="#">SignUp</a>
+    {% endif %}
+
 </div>

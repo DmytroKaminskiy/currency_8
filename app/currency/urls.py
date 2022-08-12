@@ -12,4 +12,6 @@ urlpatterns = [
     path('rate/details/<int:pk>/', views.RateDetailsView.as_view(), name='rate_details'),
     path('rate/download/', views.DownloadRateView.as_view(), name='rate_download'),
     path('contactus/create/', views.ContactUsCreateView.as_view(), name='contactus_create'),
+    # path('my-profile/<int:pk>/', views.UserProfileView.as_view(), name='my_profile'),
+    path('my-profile/', views.UserProfileView.as_view(), name='my_profile'),
 ]
