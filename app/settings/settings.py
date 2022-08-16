@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'import_export',
 
     'currency',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -158,3 +159,9 @@ LOGIN_REDIRECT_URL = reverse_lazy('index')
 # LOGOUT_REDIRECT_URL = '/currency/rate/list/'
 LOGOUT_REDIRECT_URL = reverse_lazy('currency:rate_list')
 LOGIN_URL = reverse_lazy('login')
+
+AUTH_USER_MODEL = 'accounts.User'
+
+# TODO move to env
+HTTP_SCHEMA = 'http'  # https
+DOMAIN = 'localhost:8000'
