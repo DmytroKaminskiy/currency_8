@@ -2,7 +2,7 @@ import csv
 import io
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -34,13 +34,19 @@ class IndexView(generic.TemplateView):
         return context
 
 
-class RateListView(LoginRequiredMixin, generic.ListView):
-    queryset = Rate.objects.all()
+# class RateListView(UserPassesTestMixin, generic.ListView):
+class RateListView(generic.ListView):
+    queryset = Rate.objects.all().select_related('source')
     template_name = 'currency/rate_list.html'
+    # raise_exception = True
 
     # def get_context_data(self, *args, **kwargs):
     #     Rate.objects.last()
     #     return super().get_context_data(*args, **kwargs)
+
+    # def test_func(self):
+    #     return False
+    #     return self.request.user.is_superuser
 
 
 class RateCreateView(generic.CreateView):
@@ -298,7 +304,7 @@ HEAD - GET without body (Content-Length)
 /rate/25/delete/
 
 
-
+Recursive
 '''
 
 # def foo(request):

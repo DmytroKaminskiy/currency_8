@@ -13,6 +13,7 @@ from accounts.models import User
 UserCreationForm
 # UserCreationForm
 class SignUpForm(forms.ModelForm):
+# class SignUpForm(UserCreationForm):
     password1 = forms.CharField(widget=forms.PasswordInput())
     password2 = forms.CharField(widget=forms.PasswordInput())
 

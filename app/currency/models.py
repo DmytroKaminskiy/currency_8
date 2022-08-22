@@ -9,9 +9,12 @@ class CreatedModel(models.Model):
         abstract = True
 
 
-class Rate(CreatedModel):
-    # 3 tier arch
+class Source(CreatedModel):
+    url = models.URLField()
+    name = models.CharField(max_length=256)
 
+
+class Rate(CreatedModel):
     # def get_{field_name}_display() if field has choices
     base_currency_type = models.CharField(
         max_length=3,
@@ -21,11 +24,15 @@ class Rate(CreatedModel):
     currency_type = models.CharField(max_length=3, choices=CurrencyType.choices)
     sale = models.DecimalField(max_digits=10, decimal_places=4)
     buy = models.DecimalField(max_digits=10, decimal_places=4)
-    source = models.CharField(max_length=64)
+    # source = models.ForeignKey(Source)
+    source = models.ForeignKey('currency.Source', on_delete=models.CASCADE, related_name='rates')
+
+    # def save(self):
+    #     super().save()
 
     # class Meta:
     #     ordering = ...
-    # Rate.objects.annotate().aggregate().order_by()
+    #  prefetch_related
 
 
 class ContactUs(CreatedModel):
