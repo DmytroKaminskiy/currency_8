@@ -17,6 +17,7 @@ from currency.forms import RateForm
 from currency.model_choices import CurrencyType
 from django.contrib.sessions.models import Session
 
+from currency.tasks import send_contact_us_email
 
 
 # context_processor - GLOBAL Context - base.html
@@ -144,22 +145,10 @@ class ContactUsCreateView(generic.CreateView):
         # form.cleaned_data
         # self.object
 
-        subject = 'ContactUs From Currency Project'
-        body = f'''
-        Subject From Client: {self.object.subject}
-        Email: {self.object.from_email}
-        Wants to contact
-        '''
-
-        send_mail(
-            subject,
-            body,
-            settings.EMAIL_HOST_USER,
-            [settings.EMAIL_HOST_USER],
-            fail_silently=False,
-        )
+        send_contact_us_email.delay(self.object.subject, self.object.from_email)
 
         return response
+
 
 
 # TODO move to accounts app

@@ -3,6 +3,7 @@ django-extensions
 ipython
 django-admin-rangefilter
 django-import-export
+celery
 
 # dev
 # TODO check view name is not displayed
