@@ -11,7 +11,8 @@ class CreatedModel(models.Model):
 
 class Source(CreatedModel):
     url = models.URLField()
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, unique=True)
+    code_name = models.CharField(max_length=16, unique=True)
 
 
 class Rate(CreatedModel):
