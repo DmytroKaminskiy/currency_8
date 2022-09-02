@@ -4,6 +4,7 @@ from celery import shared_task
 from django.conf import settings
 from django.core.mail import send_mail
 
+from currency.services import get_or_create_privatbank_source
 from currency.utils import to_decimal
 from currency import model_choices as mch
 from currency import consts
@@ -47,9 +48,9 @@ def send_contact_us_email(subject, from_email):
 def parse_privatbank():
     from currency.models import Rate, Source
 
-    url = 'https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11'
+    source = get_or_create_privatbank_source()
 
-    response = requests.get(url)
+    response = requests.get(source.url)
     response.raise_for_status()  # raise error if not ok
 
     response_data = response.json()
@@ -60,17 +61,6 @@ def parse_privatbank():
         'EUR': mch.CurrencyType.CURRENCY_TYPE_EUR,
         'BTC': mch.CurrencyType.CURRENCY_TYPE_BTC,
     }
-
-    # try:
-    #     source = Source.objects.get(name=source_name)
-    # except Source.DoesNotExist:
-    #     source = Source.objects.create(name=source_name, url=url)
-
-    # source, created = Source.objects.get_or_create(name=source_name, defaults={'url': url})
-    source = Source.objects.get_or_create(
-        code_name=consts.CODE_NAME_PRIVATBANK,
-        defaults={'url': url, 'name': 'PrivatBank'},
-    )[0]
 
     for rate_data in response_data:
         currency_type = rate_data['ccy']
