@@ -12,9 +12,24 @@
         <a href="{% url 'currency:rate_download' %}" class="btn btn-success"
            role="button">Download CSV</a>
     </div>
-    <div>
-    <img src="{% static "img/Python.svg.png" %}" height="100" width="100">
-    </div>
+    {#    <div>#}
+    {#        <img src="{% static "img/Python.svg.png" %}" height="100" width="100">#}
+    {#    </div>#}
+
+    <form method="get">
+        {{ filter.form.as_p }}
+        <label for="id-page_size">Items per page</label>
+        <select name="page_size" id="id-page_size">
+            {% for page_size_option in page_size_options %}
+                 <option value="{{ page_size_option }}"
+                         {% if page_size == page_size_option %}selected{% endif %}>
+                     {{ page_size_option }}
+                 </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+    <br>
 
     <div class="container mt-3">
         <h2>Rates List</h2>
@@ -22,7 +37,7 @@
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Sale</th>
+                <th><a href="{% url 'currency:rate_list' %}?{{ filters_params }}">Sale</a></th>
                 <th>Buy</th>
                 <th>Base Type</th>
                 <th>Type</th>
@@ -50,17 +65,5 @@
         </table>
     </div>
 
-    {% for rate in rate_list %}
-        <div>
-            ID: {{ rate.id }},
-            Sale: {{ rate.sale }},
-            Buy: {{ rate.buy }}
-            Base Type {{ rate.get_base_currency_type_display }}
-            Type {{ rate.get_currency_type_display }}
-            Source {{ rate.source.name }}
-            <a href="{% url 'currency:rate_details' rate.id %}">view details</a>
-            <a href="{% url 'currency:rate_update' pk=rate.id %}">edit</a>
-            <a href="{% url 'currency:rate_delete' rate.id %}">delete</a>
-        </div>
-    {% endfor %}
+    {% include 'parts/pagination.html' %}
 {% endblock main_content %}
