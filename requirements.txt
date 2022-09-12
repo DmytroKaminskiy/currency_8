@@ -5,6 +5,8 @@ django-admin-rangefilter
 django-import-export
 celery
 django-filter
+djangorestframework
+drf-excel
 
 # dev
 # TODO check view name is not displayed

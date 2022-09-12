@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.views import generic
@@ -199,6 +199,27 @@ class UserProfileView(LoginRequiredMixin, generic.UpdateView):
     def get_object(self, queryset=None):
         # super().get_object()
         return self.request.user
+
+# def api_get_rates_list(request):
+#     """
+#     API - JSON
+#
+#     XML
+#     YAML
+#     """
+#     import json
+#
+#     queryset = Rate.objects.all()
+#     response_content = []
+#     for rate in queryset:
+#         response_content.append({
+#             'id': rate.id,
+#             'buy': float(rate.buy),
+#             'sale': float(rate.sale),
+#         })
+#
+#     # return HttpResponse(json.dumps(response_content), content_type='application/json')
+#     return JsonResponse(response_content, safe=False)
 
 # def rate_list(request):
 #     context = {

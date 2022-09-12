@@ -8,6 +8,9 @@ manage:
 run:
 	$(manage_py) runserver 0:8000
 
+show_urls:
+	$(manage_py) show_urls
+
 migrate:
 	$(manage_py) migrate
 

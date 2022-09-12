@@ -14,4 +14,6 @@ urlpatterns = [
     path('contactus/create/', views.ContactUsCreateView.as_view(), name='contactus_create'),
     # path('my-profile/<int:pk>/', views.UserProfileView.as_view(), name='my_profile'),
     path('my-profile/', views.UserProfileView.as_view(), name='my_profile'),
+
+    # path('api/example/', views.api_get_rates_list),
 ]
