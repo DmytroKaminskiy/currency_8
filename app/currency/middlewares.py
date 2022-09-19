@@ -7,11 +7,11 @@ class SimpleMiddleware:
         # One-time configuration and initialization.
 
     def __call__(self, request):
-        if not request.path.startswith('/admin/'):
-            print('Admin site')
+        # if not request.path.startswith('/admin/'):
+        #     print('Admin site')
 
         start = time()
         response = self.get_response(request)
         end = time()
-        print(f'Took Time: {end - start}')
+        # print(f'Took Time: {end - start}')
         return response

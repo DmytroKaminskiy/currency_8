@@ -1,0 +1,12 @@
+[
+  {
+    "model": "currency.source",
+    "pk": 3,
+    "fields": {
+      "created": "2022-08-29T16:57:00.280Z",
+      "url": "https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11",
+      "name": "PrivatBank",
+      "code_name": "PrivatBank"
+    }
+  }
+]

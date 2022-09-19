@@ -204,6 +204,7 @@ REST_FRAMEWORK = {
         'source': '10/min',
         # 'user': '1000/day',
     },
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
 SIMPLE_JWT = {

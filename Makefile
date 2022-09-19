@@ -29,3 +29,6 @@ celerybeat:
 build_and_run: makemigrations \
 	migrate \
 	run
+
+pytest:
+	pytest app/tests/
