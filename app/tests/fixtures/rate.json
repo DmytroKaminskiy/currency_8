@@ -34,5 +34,41 @@
       "buy": "19294.8896",
       "source": 3
     }
+  },
+  {
+    "model": "currency.rate",
+    "pk": 345,
+    "fields": {
+      "created": "2022-08-29T16:57:00.317Z",
+      "base_currency_type": "USD",
+      "currency_type": "BTC",
+      "sale": "21325.9306",
+      "buy": "19294.8896",
+      "source": 3
+    }
+  },
+  {
+    "model": "currency.rate",
+    "pk": 346,
+    "fields": {
+      "created": "2022-08-29T16:57:00.317Z",
+      "base_currency_type": "USD",
+      "currency_type": "BTC",
+      "sale": "21325.9306",
+      "buy": "19294.8896",
+      "source": 3
+    }
+  },
+  {
+    "model": "currency.rate",
+    "pk": 347,
+    "fields": {
+      "created": "2022-08-29T16:57:00.317Z",
+      "base_currency_type": "USD",
+      "currency_type": "BTC",
+      "sale": "21325.9306",
+      "buy": "19294.8896",
+      "source": 3
+    }
   }
 ]

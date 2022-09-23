@@ -2,15 +2,15 @@ def add(x, y):
     return x + y
 
 
-# # 1
+# 1
 # assert add(3, 6) == 9
 # assert add(3, 7) == 10
 # assert add(1, 2) == 3
 #
-# # 2
-# assert add(3, 6) == 9
-# assert add(3, -7) == -4
-# assert add(0, 2) == 2
+# 2
+assert add(3, 6) == 9
+assert add(3, -7) == -4
+assert add(0, 2) == 2
 
 '''
 1. Manual testing (Manual QA / Coder)

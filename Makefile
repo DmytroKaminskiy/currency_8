@@ -32,3 +32,9 @@ build_and_run: makemigrations \
 
 pytest:
 	pytest app/tests/
+
+coverage:
+	pytest --cov=app app/tests/ --cov-report html && coverage report --fail-under=79.0000
+
+show-coverage:  ## open coverage HTML report in default browser
+	python3 -c "import webbrowser; webbrowser.open('.pytest_cache/coverage/index.html')"
