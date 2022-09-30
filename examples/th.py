@@ -12,6 +12,10 @@ def foo(num, num2=10):
     print('END FOO')
 
 
+# foo(3)
+# foo(2)
+# foo(4)
+
 #################################
 start = time()
 
