@@ -10,7 +10,7 @@ drf-excel
 djangorestframework-simplejwt
 drf-yasg
 gunicorn
-
+psycopg2-binary
 
 # dev
 # TODO check view name is not displayed
