@@ -41,3 +41,5 @@ show-coverage:  ## open coverage HTML report in default browser
 
 gunicorn:
 	cd app && gunicorn settings.wsgi:application --bind 0.0.0.0:8000 --workers 10 --threads 4 --log-level info --max-requests 1000 --timeout 10
+
+# qwerty123 qwerty123456

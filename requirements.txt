@@ -11,6 +11,7 @@ djangorestframework-simplejwt
 drf-yasg
 gunicorn
 psycopg2-binary
+django-storages
 
 # dev
 # TODO check view name is not displayed
