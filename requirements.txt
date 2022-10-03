@@ -1,6 +1,4 @@
 Django
-django-extensions
-ipython
 django-admin-rangefilter
 django-import-export
 celery
@@ -17,6 +15,8 @@ boto3
 # dev
 # TODO check view name is not displayed
 django-debug-toolbar
+ipython
+django-extensions
 
 # flake8
 flake8==4.0.1

@@ -10,3 +10,8 @@ Azure - ?
 GCP - compute engine
 
 3. Hybrid (1,2) Hetzner
+
+git pull origin main
+python app/manage.py migrate
+python app/manage.py collectstatic --noinput
+systemctl restart gunicorn.service

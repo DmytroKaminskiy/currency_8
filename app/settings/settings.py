@@ -200,7 +200,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_THROTTLE_RATES': {
-        'rate': '2/min',
+        'rate': '20/min',
         'source': '10/min',
         # 'user': '1000/day',
     },
