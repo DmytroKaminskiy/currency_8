@@ -11,6 +11,7 @@ gunicorn
 psycopg2-binary
 django-storages
 boto3
+pymemcache
 
 # dev
 # TODO check view name is not displayed

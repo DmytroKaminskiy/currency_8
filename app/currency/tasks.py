@@ -8,6 +8,7 @@ from currency.services import get_or_create_privatbank_source
 from currency.utils import to_decimal
 from currency import model_choices as mch
 from currency import consts
+from django.core.cache import cache
 
 
 @shared_task
@@ -97,3 +98,5 @@ def parse_privatbank():
                 sale=sale,
                 source=source,
             )
+            cache.clear()  #  TODO clear by prefix
+            # cache.set()

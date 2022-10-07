@@ -3,13 +3,16 @@ import io
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.cache import cache
 
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
+from django.utils.decorators import method_decorator
 from django.views import generic
 # from settings import settings BAD
 from django.conf import settings
+from django.views.decorators.cache import cache_page
 from django_filters.views import FilterView
 
 from currency.filters import RateFilter
@@ -17,7 +20,6 @@ from currency.resources import RateResource
 from currency.models import Rate, ContactUs
 from currency.forms import RateForm
 from currency.model_choices import CurrencyType
-from django.contrib.sessions.models import Session
 
 from currency.tasks import send_contact_us_email
 
@@ -28,11 +30,24 @@ from currency.tasks import send_contact_us_email
 #     return render(request, 'currency/index.html')
 
 
+@method_decorator(cache_page(60 * 60 * 24 * 14), name='dispatch')
 class IndexView(generic.TemplateView):
     template_name = 'currency/index.html'
 
     def get_context_data(self, **kwargs) -> dict:
+
+        print('GET CONTEXT\n' * 3)
         context: dict = super().get_context_data(**kwargs)
+
+        # cache_key = 'IndexPage'
+        # rate_count = cache.get(cache_key)
+        # if rate_count:
+        #     context['rate_count'] = rate_count
+        # else:
+        #     rate_count = Rate.objects.count()
+        #     cache.set(cache_key, rate_count, 10)
+        #     context['rate_count'] = rate_count
+
         context['rate_count'] = Rate.objects.count()
         return context
 
