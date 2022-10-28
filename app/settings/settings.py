@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+import os
+
 from datetime import timedelta
 
 from celery.schedules import crontab
@@ -23,12 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u_83b)73ri&&fx+=1)&_x6#dvw)-f^tvt*mzm2q)4*s1r6a39!sevcsj'
+# SECRET_KEY = 'django-insecure-u_83b)73ri&&fx+=1)&_x6#dvw)-f^tvt*mzm2q)4*s1r6a39!sevcsj'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
 
 
 # Application definition
@@ -103,18 +106,18 @@ WSGI_APPLICATION = 'settings.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'currency-db',
-        'USER': 'currency',
-        'PASSWORD': 'exampleCurrency',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': os.environ['POSTGRES_HOST'],  # '172.25.0.2',
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),  # 5432
     }
 }
 
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': '127.0.0.1:11211',
+        'LOCATION': f'{os.environ["MEMCACHED_HOST"]}:{os.environ.get("MEMCACHED_PORT", "11211")}',
     }
 }
 
@@ -153,12 +156,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = os.environ.get('STATIC_URL', 'static/')
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-MEDIA_URL = 'media/'
+MEDIA_URL = os.environ.get('MEDIA_URL', 'media/')
 MEDIA_ROOT = BASE_DIR / '..' / 'static_content' / 'media'
 
 # Default primary key field type
@@ -171,6 +174,7 @@ if DEBUG:
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
 
+# TODO move to environment variables (os.environ!)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
@@ -192,11 +196,19 @@ LOGIN_URL = reverse_lazy('login')
 
 AUTH_USER_MODEL = 'accounts.User'
 
-# TODO move to env
-HTTP_SCHEMA = 'http'  # https
-DOMAIN = 'localhost:8000'
+HTTP_SCHEMA = os.environ.get('HTTP_SCHEMA', 'http')  # https
+DOMAIN = os.environ.get('DOMAIN', 'localhost:8000')
 
-CELERY_BROKER_URL = 'amqp://localhost'
+# CELERY_BROKER_URL = f'amqp://guest:guest@localhost:5672//'
+RABBITMQ_DEFAULT_USER = os.environ["RABBITMQ_DEFAULT_USER"]
+RABBITMQ_DEFAULT_PASS = os.environ["RABBITMQ_DEFAULT_PASS"]
+RABBITMQ_DEFAULT_HOST = os.environ.get("RABBITMQ_DEFAULT_HOST", "localhost")
+RABBITMQ_DEFAULT_PORT = os.environ.get("RABBITMQ_DEFAULT_PORT", "5672")
+
+
+CELERY_BROKER_URL = f'amqp://{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}@' \
+        f'{RABBITMQ_DEFAULT_HOST}:{RABBITMQ_DEFAULT_PORT}//'
+
 CELERY_BEAT_SCHEDULE = {
     'slow_func': {
         'task': 'currency.tasks.slow_func',
@@ -253,7 +265,7 @@ SIMPLE_JWT = {
 }
 
 
-try:
-    from settings.settings_local import *
-except ImportError:
-    print('Settings Local not found')
+#try:
+#    from settings.settings_local import *
+#except ImportError:
+#    print('Settings Local not found')

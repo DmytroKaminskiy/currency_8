@@ -1,12 +1,9 @@
 SHELL := /bin/bash
 
-manage_py := python app/manage.py
+manage_py := docker exec -it backend python app/manage.py
 
 manage:
 	$(manage_py) $(COMMAND)
-
-run:
-	$(manage_py) runserver 0:8000
 
 show_urls:
 	$(manage_py) show_urls
@@ -20,26 +17,18 @@ makemigrations:
 shell:
 	$(manage_py) shell_plus --print-sql
 
-celery:
-	cd app && celery -A settings worker --loglevel=INFO
-
-celerybeat:
-	cd app && celery -A settings beat --loglevel=INFO
+build:
+	cp -n .env.example .env && docker-compose up -d --build
 
 build_and_run: makemigrations \
 	migrate \
 	run
 
 pytest:
-	pytest app/tests/
+	docker exec -it backend pytest app/tests/
 
 coverage:
-	pytest --cov=app app/tests/ --cov-report html && coverage report --fail-under=79.0000
+	docker exec -it backend pytest --cov=app app/tests/ --cov-report html && docker exec -it backend coverage report --fail-under=79.0000
 
 show-coverage:  ## open coverage HTML report in default browser
 	python3 -c "import webbrowser; webbrowser.open('.pytest_cache/coverage/index.html')"
-
-gunicorn:
-	cd app && gunicorn settings.wsgi:application --bind 0.0.0.0:8000 --workers 10 --threads 4 --log-level info --max-requests 1000 --timeout 10
-
-# qwerty123 qwerty123456
