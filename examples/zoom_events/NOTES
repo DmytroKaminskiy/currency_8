@@ -1,0 +1,11 @@
+xmldksc838@tmail3.com
+
+Adawdad#3w6w346rtw46vb$
+
+
+POC - proof of concept
+
+sqlalchemy - ORM[sync] and Core[sync+async]
+alembic - migrations
+psycopg2-binary - ???
+databases[postgresql] - Simple interface async SQL, asyncpg
