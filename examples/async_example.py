@@ -43,6 +43,7 @@ import httpx
 async def fetch_url(url: str) -> int:
     # response = httpx.get(url)
     # print(response.status_code)
+    # Rate.objects.all().order_by().filter()
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
         print(response.status_code)

@@ -32,7 +32,7 @@ from rest_framework import filters as rest_framework_filters
 
 
 class RateViewSet(XLSXFileMixin, ModelViewSet):
-    queryset = Rate.objects.all()
+    queryset = Rate.objects.all().order_by('-created')
     serializer_class = RateSerializer
     renderer_classes = [JSONRenderer, XLSXRenderer]
     filename = 'my_export.xlsx'
