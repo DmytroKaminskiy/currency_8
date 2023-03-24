@@ -20,7 +20,8 @@ shell:
 build:
 	cp -n .env.example .env && docker-compose up -d --build
 
-build_and_run: makemigrations \
+build_and_run: build \
+	makemigrations \
 	migrate \
 	run
 

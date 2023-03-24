@@ -38,8 +38,8 @@ services:
   memcached:
     image: memcached:1.6.17-alpine
     container_name: memcached
-    ports:
-      - "11211:11211"
+    # ports:
+    #   - "11211:11211"
 
   rabbitmq:
     image: rabbitmq:3.11.2-management-alpine
